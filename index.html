@@ -1272,7 +1272,7 @@ s0.parentNode.insertBefore(s1, s0);
         <div id="chat-input-area">
             <input type="text" id="chat-input" placeholder="Nhập câu hỏi..." />
             <button id="send-btn" title="Gửi">📤</button>
-            <button id="mic-btn" title="Nói">🎤</button> <!-- Đã thêm -->
+            <button id="mic-btn" title="Nói">🎤</button>
             <input type="file" id="image-input" accept="image/*" style="display: none;" />
             <button id="upload-btn" title="Tải ảnh">📷</button>
 
@@ -1726,7 +1726,14 @@ s0.parentNode.insertBefore(s1, s0);
             recognition.start();
         };
 
-
+        const reader = new FileReader();
+        reader.onload = () => {
+            const imgElement = document.createElement("img");
+            imgElement.src = reader.result;
+            imgElement.style.maxWidth = "100%";
+            addMessage(imgElement.outerHTML, "user");
+        };
+        reader.readAsDataURL(file);
         document.getElementById("upload-btn").onclick = () => {
             document.getElementById("image-input").click();
         };
