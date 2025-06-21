@@ -1272,7 +1272,9 @@ s0.parentNode.insertBefore(s1, s0);
         <div id="chat-input-area">
             <input type="text" id="chat-input" placeholder="Nhập câu hỏi..." />
             <button id="send-btn" title="Gửi">📤</button>
+            <button id="mic-btn" title="Nói">🎤</button> <!-- Đã thêm -->
         </div>
+
     </div>
 
     <!-- CSS -->
@@ -1510,6 +1512,16 @@ s0.parentNode.insertBefore(s1, s0);
             animation-delay: 0.4s;
         }
 
+        #mic-btn {
+            background: transparent;
+            border: none;
+            font-size: 20px;
+            margin-left: 10px;
+            color: #dc3545;
+            cursor: pointer;
+        }
+
+
         @keyframes typing-dot {
 
             0%,
@@ -1675,6 +1687,43 @@ s0.parentNode.insertBefore(s1, s0);
                 }, 1000);
             }
         });
+
+        const micBtn = document.getElementById("mic-btn");
+
+        micBtn.onclick = () => {
+            const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+            if (!SpeechRecognition) {
+                alert("Trình duyệt của bạn không hỗ trợ nhận diện giọng nói.");
+                return;
+            }
+
+            const recognition = new SpeechRecognition();
+            recognition.lang = "vi-VN";
+            recognition.interimResults = false;
+            recognition.maxAlternatives = 1;
+
+            micBtn.disabled = true;
+            micBtn.innerText = "🎙️...";
+
+            recognition.onresult = (event) => {
+                const voiceText = event.results[0][0].transcript;
+                chatInput.value = voiceText;
+                sendMessage();
+            };
+
+            recognition.onerror = (event) => {
+                alert("Lỗi ghi âm: " + event.error);
+            };
+
+            recognition.onend = () => {
+                micBtn.disabled = false;
+                micBtn.innerText = "🎤";
+            };
+
+            recognition.start();
+        };
+
+
     </script>
 
 
