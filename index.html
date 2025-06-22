@@ -1272,10 +1272,7 @@ s0.parentNode.insertBefore(s1, s0);
         <div id="chat-input-area">
             <input type="text" id="chat-input" placeholder="Nhập câu hỏi..." />
             <button id="send-btn" title="Gửi">📤</button>
-            <button id="mic-btn" title="Nói">🎤</button>
-            <input type="file" id="image-input" accept="image/*" style="display: none;" />
-            <button id="upload-btn" title="Tải ảnh">📷</button>
-
+            <button id="mic-btn" title="Nói">🎤</button> <!-- Đã thêm -->
         </div>
 
     </div>
@@ -1726,46 +1723,6 @@ s0.parentNode.insertBefore(s1, s0);
             recognition.start();
         };
 
-
-        document.getElementById("upload-btn").onclick = () => {
-            document.getElementById("image-input").click();
-        };
-
-        document.getElementById("image-input").addEventListener("change", async function () {
-            const file = this.files[0];
-            const reader = new FileReader();
-            reader.onload = () => {
-                const imgElement = document.createElement("img");
-                imgElement.src = reader.result;
-                imgElement.style.maxWidth = "100%";
-                addMessage(imgElement.outerHTML, "user");
-            };
-            reader.readAsDataURL(file);
-
-            if (!file) return;
-
-            addMessage("📷 Bạn đã tải lên một ảnh.", "user");
-            addTyping();
-
-            const formData = new FormData();
-            formData.append("image", file);
-            formData.append("session_id", sessionId);
-
-            try {
-                const res = await fetch("https://chatbotbkacadmain-production.up.railway.app/upload-image", {
-                    method: "POST",
-                    body: formData
-                });
-
-                const data = await res.json();
-                removeTyping();
-                addMessage(data.response || "Ảnh đã được xử lý.", "bot");
-            } catch (err) {
-                console.error(err);
-                removeTyping();
-                addMessage("⚠️ Lỗi khi gửi ảnh.", "bot");
-            }
-        });
 
     </script>
 
