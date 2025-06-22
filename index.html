@@ -1698,6 +1698,11 @@ s0.parentNode.insertBefore(s1, s0);
 
         const micBtn = document.getElementById("mic-btn");
 
+        let recognition;
+        let isRecording = false;
+        let micInterval;
+        let micSeconds = 0;
+
         micBtn.onclick = () => {
             const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
             if (!SpeechRecognition) {
@@ -1705,31 +1710,47 @@ s0.parentNode.insertBefore(s1, s0);
                 return;
             }
 
-            const recognition = new SpeechRecognition();
-            recognition.lang = "vi-VN";
-            recognition.interimResults = false;
-            recognition.maxAlternatives = 1;
+            if (!recognition) {
+                recognition = new SpeechRecognition();
+                recognition.lang = "vi-VN";
+                recognition.interimResults = false;
+                recognition.maxAlternatives = 1;
 
-            micBtn.disabled = true;
-            micBtn.innerText = "🎙️...";
+                recognition.onresult = (event) => {
+                    const voiceText = event.results[0][0].transcript;
+                    chatInput.value = voiceText;
+                    sendMessage();
+                };
 
-            recognition.onresult = (event) => {
-                const voiceText = event.results[0][0].transcript;
-                chatInput.value = voiceText;
-                sendMessage();
-            };
+                recognition.onerror = (event) => {
+                    alert("Lỗi ghi âm: " + event.error);
+                };
 
-            recognition.onerror = (event) => {
-                alert("Lỗi ghi âm: " + event.error);
-            };
+                recognition.onend = () => {
+                    isRecording = false;
+                    micBtn.innerText = "🎤";
+                    clearInterval(micInterval);
+                };
+            }
 
-            recognition.onend = () => {
-                micBtn.disabled = false;
+            if (!isRecording) {
+                recognition.start();
+                isRecording = true;
+                micSeconds = 0;
+                micBtn.innerText = "🎙️ 0s";
+
+                micInterval = setInterval(() => {
+                    micSeconds += 1;
+                    micBtn.innerText = `🎙️ ${micSeconds}s`;
+                }, 1000);
+            } else {
+                recognition.stop();
+                isRecording = false;
                 micBtn.innerText = "🎤";
-            };
-
-            recognition.start();
+                clearInterval(micInterval);
+            }
         };
+
 
         const sendBtn = document.getElementById("send-btn");
         sendBtn.onclick = sendMessage;
