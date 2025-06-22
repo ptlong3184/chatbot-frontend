@@ -1270,7 +1270,7 @@ s0.parentNode.insertBefore(s1, s0);
         </div>
 
         <div id="chat-input-area">
-            <input type="text" id="chat-input" placeholder="Nhập câu hỏi..." />
+            <textarea id="chat-input" placeholder="Nhập câu hỏi..." rows="1"></textarea>
             <button id="send-btn" title="Gửi">📤</button>
             <button id="mic-btn" title="Nói">🎤</button> <!-- Đã thêm -->
         </div>
@@ -1395,7 +1395,10 @@ s0.parentNode.insertBefore(s1, s0);
             border-radius: 16px;
             max-width: 80%;
             word-wrap: break-word;
+            white-space: pre-wrap;
+            word-break: break-word;
         }
+
 
         .msg.user {
             background: #007bff;
@@ -1475,10 +1478,15 @@ s0.parentNode.insertBefore(s1, s0);
             flex: 1;
             padding: 10px;
             border: 1px solid #ccc;
-            border-radius: 20px;
+            border-radius: 12px;
             outline: none;
             font-size: 14px;
+            resize: none;
+            line-height: 1.4;
+            max-height: 80px;
+            overflow-y: auto;
         }
+
 
         #send-btn {
             background: transparent;
@@ -1722,6 +1730,9 @@ s0.parentNode.insertBefore(s1, s0);
 
             recognition.start();
         };
+
+        const sendBtn = document.getElementById("send-btn");
+        sendBtn.onclick = sendMessage;
 
 
     </script>
