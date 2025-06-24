@@ -1623,8 +1623,8 @@ s0.parentNode.insertBefore(s1, s0);
             chatSuggestions.scrollLeft = 0;
         }
 
-        async function sendMessage() {
-            const text = chatInput.value.trim();
+        async function sendMessage(textFromBtn = null) {
+            const text = textFromBtn || chatInput.value.trim();
             if (!text) return;
 
             addMessage(text, "user");
@@ -1646,7 +1646,7 @@ s0.parentNode.insertBefore(s1, s0);
                 if (data.suggestions && data.suggestions.length > 0) {
                     updateSuggestions(data.suggestions);
                 } else {
-                    chatSuggestions.innerHTML = ""; // Không có gợi ý → xoá hết
+                    chatSuggestions.innerHTML = "";
                 }
 
             } catch (err) {
@@ -1655,6 +1655,7 @@ s0.parentNode.insertBefore(s1, s0);
                 addMessage("⚠️ Lỗi kết nối đến máy chủ.", "bot");
             }
         }
+
 
         function resetChat() {
             chatMessages.innerHTML = "";
@@ -1682,10 +1683,11 @@ s0.parentNode.insertBefore(s1, s0);
 
         chatSuggestions.addEventListener("click", function (e) {
             if (e.target.classList.contains("suggestion-btn")) {
-                chatInput.value = e.target.textContent;
-                sendMessage();
+                const suggestion = e.target.textContent;
+                sendMessage(suggestion);  // truyền trực tiếp
             }
         });
+
 
         window.addEventListener("load", () => {
             chatContainer.style.display = "none";
