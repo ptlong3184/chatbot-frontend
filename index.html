@@ -1637,6 +1637,17 @@ s0.parentNode.insertBefore(s1, s0);
                 removeTyping();
                 const botReply = data.response || "Xin lỗi, tôi chưa có thông tin phù hợp.";
                 addMessage(botReply, "bot");
+                if (data.suggestions && data.suggestions.length > 0) {
+                    chatSuggestions.innerHTML = ""; // Xóa gợi ý cũ
+                    data.suggestions.forEach((suggestion) => {
+                        const btn = document.createElement("button");
+                        btn.className = "suggestion-btn";
+                        btn.textContent = suggestion;
+                        chatSuggestions.appendChild(btn);
+                    });
+                    chatSuggestions.scrollLeft = 0;
+                }
+
             } catch (err) {
                 console.error(err);
                 removeTyping();
