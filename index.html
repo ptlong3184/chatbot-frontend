@@ -1686,10 +1686,12 @@ s0.parentNode.insertBefore(s1, s0);
         // Gợi ý tin nhắn mẫu
         chatSuggestions.addEventListener("click", function (e) {
             if (e.target.classList.contains("suggestion-btn")) {
+                chatSuggestions.innerHTML = ""; // 🔁 Xóa ngay gợi ý cũ
                 chatInput.value = e.target.textContent;
                 sendMessage();
             }
         });
+
 
         // Khởi động ban đầu
         window.addEventListener("load", () => {
