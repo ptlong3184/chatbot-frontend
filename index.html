@@ -1559,7 +1559,6 @@ s0.parentNode.insertBefore(s1, s0);
 
         let sessionId = "user-" + Date.now(); // ID phiên trò chuyện
 
-        // Mở khung chat
         chatToggle.onclick = () => {
             chatContainer.classList.add("show");
             chatContainer.style.display = "flex";
@@ -1567,7 +1566,6 @@ s0.parentNode.insertBefore(s1, s0);
             chatClose.style.display = "flex";
         };
 
-        // Đóng khung chat
         chatClose.onclick = () => {
             chatContainer.classList.remove("show");
             setTimeout(() => {
@@ -1577,7 +1575,6 @@ s0.parentNode.insertBefore(s1, s0);
             chatClose.style.display = "none";
         };
 
-        // Thêm tin nhắn vào khung chat
         function addMessage(text, sender) {
             const msg = document.createElement("div");
             msg.className = `msg ${sender}`;
@@ -1594,7 +1591,6 @@ s0.parentNode.insertBefore(s1, s0);
             saveChatHistory();
         }
 
-        // Thêm hiệu ứng typing
         function addTyping() {
             if (document.getElementById("typing")) return;
 
@@ -1611,13 +1607,22 @@ s0.parentNode.insertBefore(s1, s0);
             chatMessages.scrollTop = chatMessages.scrollHeight;
         }
 
-        // Xóa hiệu ứng typing
         function removeTyping() {
             const typing = document.getElementById("typing");
             if (typing) typing.remove();
         }
 
-        // Gửi tin nhắn đến API
+        function updateSuggestions(suggestions) {
+            chatSuggestions.innerHTML = ""; // Xoá gợi ý cũ
+            suggestions.forEach((suggestion) => {
+                const btn = document.createElement("button");
+                btn.className = "suggestion-btn";
+                btn.textContent = suggestion;
+                chatSuggestions.appendChild(btn);
+            });
+            chatSuggestions.scrollLeft = 0;
+        }
+
         async function sendMessage() {
             const text = chatInput.value.trim();
             if (!text) return;
@@ -1637,15 +1642,11 @@ s0.parentNode.insertBefore(s1, s0);
                 removeTyping();
                 const botReply = data.response || "Xin lỗi, tôi chưa có thông tin phù hợp.";
                 addMessage(botReply, "bot");
+
                 if (data.suggestions && data.suggestions.length > 0) {
-                    chatSuggestions.innerHTML = ""; // Xóa gợi ý cũ
-                    data.suggestions.forEach((suggestion) => {
-                        const btn = document.createElement("button");
-                        btn.className = "suggestion-btn";
-                        btn.textContent = suggestion;
-                        chatSuggestions.appendChild(btn);
-                    });
-                    chatSuggestions.scrollLeft = 0;
+                    updateSuggestions(data.suggestions);
+                } else {
+                    chatSuggestions.innerHTML = ""; // Không có gợi ý → xoá hết
                 }
 
             } catch (err) {
@@ -1655,7 +1656,6 @@ s0.parentNode.insertBefore(s1, s0);
             }
         }
 
-        // Reset chat
         function resetChat() {
             chatMessages.innerHTML = "";
             localStorage.removeItem("chatHistory");
@@ -1667,33 +1667,26 @@ s0.parentNode.insertBefore(s1, s0);
             }, 500);
         }
 
-        // Lưu lịch sử chat
         function saveChatHistory() {
             localStorage.setItem("chatHistory", chatMessages.innerHTML);
         }
 
-        // Tải lại lịch sử chat
         function loadChatHistory() {
             const history = localStorage.getItem("chatHistory");
             if (history) chatMessages.innerHTML = history;
         }
 
-        // Gửi bằng nút Enter
         chatInput.addEventListener("keydown", function (e) {
             if (e.key === "Enter") sendMessage();
         });
 
-        // Gợi ý tin nhắn mẫu
         chatSuggestions.addEventListener("click", function (e) {
             if (e.target.classList.contains("suggestion-btn")) {
-                chatSuggestions.innerHTML = ""; // 🔁 Xóa ngay gợi ý cũ
                 chatInput.value = e.target.textContent;
                 sendMessage();
             }
         });
 
-
-        // Khởi động ban đầu
         window.addEventListener("load", () => {
             chatContainer.style.display = "none";
             chatToggle.style.display = "flex";
@@ -1764,12 +1757,10 @@ s0.parentNode.insertBefore(s1, s0);
             }
         };
 
-
         const sendBtn = document.getElementById("send-btn");
         sendBtn.onclick = sendMessage;
-
-
     </script>
+
 
 
 </body>
