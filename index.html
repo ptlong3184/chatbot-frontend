@@ -1256,7 +1256,7 @@ s0.parentNode.insertBefore(s1, s0);
     <div id="chat-container">
         <div id="chat-header">
             <span>🤖 Chatbot Tư vấn tuyển sinh</span>
-            <button type="button" class="btn-reset" onclick="resetChat()" title="Làm mới">
+            <button type="button" class="btn-reset" onclick="hardResetChat()" title="Làm mới">
                 🔄
             </button>
         </div>
@@ -1665,7 +1665,31 @@ s0.parentNode.insertBefore(s1, s0);
                 addMessage("Xin chào! Tôi là Chatbot tư vấn tuyển sinh BKACAD 👋", "bot");
                 localStorage.setItem("chattedBefore", "yes");
             }, 500);
+
+            location.reload(); // 👉 Thêm dòng này để reload toàn trang
         }
+
+        function hardResetChat() {
+            // Xóa lịch sử trò chuyện
+            chatMessages.innerHTML = "";
+            chatSuggestions.innerHTML = "";
+            chatInput.value = "";
+
+            // Tạo sessionId mới
+            sessionId = "user-" + Date.now();
+
+            // Xóa localStorage
+            localStorage.removeItem("chatHistory");
+            localStorage.removeItem("chattedBefore");
+
+            // Hiển thị lời chào ban đầu
+            setTimeout(() => {
+                addMessage("Xin chào! Tôi là Chatbot tư vấn tuyển sinh BKACAD 👋", "bot");
+                localStorage.setItem("chattedBefore", "yes");
+            }, 500);
+        }
+
+
 
         function saveChatHistory() {
             localStorage.setItem("chatHistory", chatMessages.innerHTML);
