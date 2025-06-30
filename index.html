@@ -1766,7 +1766,11 @@ Tôi có thể hỗ trợ bạn tìm hiểu về Học viện, các ngành học
                 }, 1000);
             }
             const sendBtn = document.getElementById("send-btn");
-            sendBtn.onclick = sendMessage;
+            if (sendBtn) {
+                sendBtn.onclick = sendMessage;
+            } else {
+                console.error("Không tìm thấy nút gửi (#send-btn)");
+            }
         });
 
 
