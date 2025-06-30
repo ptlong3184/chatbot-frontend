@@ -1670,24 +1670,22 @@ s0.parentNode.insertBefore(s1, s0);
         }
 
         function hardResetChat() {
-            // Xóa lịch sử trò chuyện
             chatMessages.innerHTML = "";
             chatSuggestions.innerHTML = "";
             chatInput.value = "";
 
-            // Tạo sessionId mới
             sessionId = "user-" + Date.now();
 
-            // Xóa localStorage
             localStorage.removeItem("chatHistory");
             localStorage.removeItem("chattedBefore");
 
-            // Hiển thị lời chào ban đầu
             setTimeout(() => {
                 addMessage("Xin chào! Tôi là Chatbot tư vấn tuyển sinh BKACAD 👋", "bot");
+                setDefaultSuggestions(); // 👈 Thêm dòng này để khởi tạo lại 3 gợi ý mặc định
                 localStorage.setItem("chattedBefore", "yes");
             }, 500);
         }
+
 
 
 
@@ -1784,6 +1782,22 @@ s0.parentNode.insertBefore(s1, s0);
 
         const sendBtn = document.getElementById("send-btn");
         sendBtn.onclick = sendMessage;
+
+        function setDefaultSuggestions() {
+            chatSuggestions.innerHTML = "";
+            const defaultSuggestions = [
+                "BKACAD là trường gì?",
+                "Trường đào tạo những ngành nào?",
+                "Học phí bao nhiêu 1 năm?"
+            ];
+            defaultSuggestions.forEach(text => {
+                const btn = document.createElement("button");
+                btn.className = "suggestion-btn";
+                btn.textContent = text;
+                chatSuggestions.appendChild(btn);
+            });
+        }
+
     </script>
 
 
