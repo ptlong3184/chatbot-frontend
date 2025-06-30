@@ -1585,11 +1585,21 @@ s0.parentNode.insertBefore(s1, s0);
                 minute: "2-digit",
             });
 
-            msg.innerHTML = `<div>${text}</div><small style="font-size:10px;opacity:0.6">${time}</small>`;
+            msg.innerHTML = `<div>${linkify(text)}</div><small style="font-size:10px;opacity:0.6">${time}</small>`;
+
             chatMessages.appendChild(msg);
             chatMessages.scrollTop = chatMessages.scrollHeight;
             saveChatHistory();
         }
+
+
+        function linkify(text) {
+            const urlPattern = /(https?:\/\/[^\s]+)/g;
+            return text.replace(urlPattern, (url) => {
+                return `<a href="${url}" target="_blank" rel="noopener noreferrer">${url}</a>`;
+            });
+        }
+
 
         function addTyping() {
             if (document.getElementById("typing")) return;
@@ -1662,9 +1672,17 @@ s0.parentNode.insertBefore(s1, s0);
             localStorage.removeItem("chattedBefore");
 
             setTimeout(() => {
-                addMessage("Xin chào! Tôi là Chatbot tư vấn tuyển sinh BKACAD 👋", "bot");
+                addMessage(`Xin chào! Tôi là Chatbot tư vấn tuyển sinh của BKACAD 👋<br>
+    Tôi có thể hỗ trợ bạn tìm hiểu về Học viện, các ngành học, học phí và thông tin tuyển sinh tại trường.<br><br>
+    📌 <b>Lưu ý:</b> Chatbot này chỉ phục vụ cho mục đích tư vấn thông tin tuyển sinh và định hướng ngành học tại BKACAD.<br>
+    Để được hỗ trợ về các thủ tục hành chính, đăng ký xét tuyển, lịch học, hồ sơ hoặc các thông tin chính thức khác, vui lòng liên hệ trực tiếp với các cô tư vấn tại Phòng Tuyển sinh:<br>
+    📍 P201, Tòa nhà A17 Bách Khoa, 17 Tạ Quang Bửu, Hai Bà Trưng, Hà Nội<br>
+    📞 <b>ĐT:</b> 0243 623 1023`, "bot");
+
+                setDefaultSuggestions(); // gợi ý mặc định
                 localStorage.setItem("chattedBefore", "yes");
             }, 500);
+
 
             location.reload(); // 👉 Thêm dòng này để reload toàn trang
         }
