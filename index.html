@@ -1698,9 +1698,21 @@ s0.parentNode.insertBefore(s1, s0);
             localStorage.removeItem("chattedBefore");
 
             setTimeout(() => {
-                addMessage("Xin chào! Tôi là Chatbot tư vấn tuyển sinh BKACAD 👋", "bot");
-                setDefaultSuggestions(); // 👈 Thêm dòng này để khởi tạo lại 3 gợi ý mặc định
+                addMessage(`Xin chào! Tôi là Chatbot tư vấn tuyển sinh của BKACAD 👋  
+Tôi có thể hỗ trợ bạn tìm hiểu về Học viện, các ngành học, học phí và thông tin tuyển sinh tại trường.
+
+📌 Lưu ý: Chatbot này chỉ phục vụ cho mục đích tư vấn thông tin tuyển sinh và định hướng ngành học tại BKACAD.  
+Để được hỗ trợ về các thủ tục hành chính, đăng ký xét tuyển, lịch học, hồ sơ hoặc các thông tin chính thức khác, vui lòng liên hệ trực tiếp với các cô tư vấn tại Phòng Tuyển sinh:  
+📍 P201, Tòa nhà A17 Bách Khoa, 17 Tạ Quang Bửu, Hai Bà Trưng, Hà Nội  
+📞 ĐT: 0243 623 1023`, "bot");
+
                 localStorage.setItem("chattedBefore", "yes");
+
+                updateSuggestions([
+                    "BKACAD là trường gì?",
+                    "Trường đào tạo những ngành nào?",
+                    "Học phí bao nhiêu 1 năm?"
+                ]);
             }, 500);
         }
 
