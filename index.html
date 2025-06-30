@@ -1585,13 +1585,15 @@ s0.parentNode.insertBefore(s1, s0);
                 minute: "2-digit",
             });
 
-            const safeText = text.includes("<") ? text : linkify(text);
+            // ✅ Dùng linkify nếu không phải HTML đã định dạng sẵn
+            const safeText = text.includes("<a") || text.includes("<br>") || text.includes("<b>") ? text : linkify(text);
 
             msg.innerHTML = `<div>${safeText}</div><small style="font-size:10px;opacity:0.6">${time}</small>`;
             chatMessages.appendChild(msg);
             chatMessages.scrollTop = chatMessages.scrollHeight;
             saveChatHistory();
         }
+
 
 
 
@@ -1757,8 +1759,7 @@ Tôi có thể hỗ trợ bạn tìm hiểu về Học viện, các ngành học
 📌 <b>Lưu ý:</b> Chatbot này chỉ phục vụ cho mục đích tư vấn thông tin tuyển sinh và định hướng ngành học tại BKACAD.<br>
 Để được hỗ trợ về các thủ tục hành chính, đăng ký xét tuyển, lịch học, hồ sơ hoặc các thông tin chính thức khác, vui lòng liên hệ trực tiếp với các cô tư vấn tại Phòng Tuyển sinh:<br>
 📍 P201, Tòa nhà A17 Bách Khoa, 17 Tạ Quang Bửu, Hai Bà Trưng, Hà Nội<br>
-📞 <b>ĐT:</b> 0243 623 1023<br>
-🔗 Tham khảo thêm tại: <a href="https://bkacad.edu.vn/chuyen-tiep-trong-amp;-ngoai-nuoc-cn311.html" target="_blank">bkacad.edu.vn</a>`, "bot");
+📞 <b>ĐT:</b> 0243 623 1023<br>`, "bot");
 
                     updateSuggestions([
                         "BKACAD là trường gì?",
@@ -1769,8 +1770,8 @@ Tôi có thể hỗ trợ bạn tìm hiểu về Học viện, các ngành học
                     localStorage.setItem("chattedBefore", "yes");
                 }, 1000);
             }
-
         });
+
 
         const micBtn = document.getElementById("mic-btn");
 
