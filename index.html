@@ -1585,14 +1585,17 @@ s0.parentNode.insertBefore(s1, s0);
                 minute: "2-digit",
             });
 
-            // ✅ Dùng linkify nếu không phải HTML đã định dạng sẵn
-            const safeText = text.includes("<a") || text.includes("<br>") || text.includes("<b>") ? text : linkify(text);
+            const strText = String(text || ""); // ✅ ép kiểu an toàn
+            const safeText = strText.includes("<a") || strText.includes("<br>") || strText.includes("<b>")
+                ? strText
+                : linkify(strText);
 
             msg.innerHTML = `<div>${safeText}</div><small style="font-size:10px;opacity:0.6">${time}</small>`;
             chatMessages.appendChild(msg);
             chatMessages.scrollTop = chatMessages.scrollHeight;
             saveChatHistory();
         }
+
 
 
 
